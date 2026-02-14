@@ -12,7 +12,8 @@ import androidx.compose.ui.unit.dp
 /**
  * Content for displaying a registration failure result with an error message and restart button.
  *
- * This composable is used for critical registration failures that cannot be handled by the registration form directly.
+ * This composable is used for critical registration failures that cannot be handled
+ * by the registration form directly.
  *
  * @param onRestart Callback invoked when the restart button is clicked.
  * @param error Optional error message to display.
@@ -21,8 +22,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun RegistrationResultFailureContent(
     onRestart: () -> Unit,
-    error: String? = null,
     modifier: Modifier = Modifier,
+    error: String? = null,
 ) = RegistrationCard(
     modifier = modifier,
     contentPadding = PaddingValues(all = 16.dp),

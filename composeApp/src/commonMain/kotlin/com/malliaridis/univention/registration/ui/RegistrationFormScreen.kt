@@ -2,7 +2,6 @@ package com.malliaridis.univention.registration.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,39 +17,41 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.malliaridis.univention.domain.Address
 import com.malliaridis.univention.registration.RegistrationFormUiState
-import com.malliaridis.univention.registration.di.RegistrationComponent
 import kotlinx.coroutines.flow.collectLatest
 
 /**
- * Registration form route that uses the [component] for handling interactions with the registration form.
+ * Registration form route that uses the [viewModel] for handling interactions with
+ * the registration form.
  *
  * This is a stateful composable used for routing.
  *
- * @param component Registration component providing dependencies for the registration form.
+ * @param viewModel Registration form view model for handling interactions.
  * @param onRegistrationSuccess Callback invoked when registration is successful.
- * @param onRegistrationFailure Callback invoked when registration fails, providing the failure message.
+ * @param onRegistrationFailure Callback invoked when registration fails, providing
+ * the failure message.
  * @param modifier Modifier to be applied to the layout.
  */
 @Composable
 internal fun RegistrationFormRoute(
-    component: RegistrationComponent,
+    viewModel: RegistrationFormViewModel,
     onRegistrationSuccess: () -> Unit,
     onRegistrationFailure: (String) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
-    val viewModel = viewModel { component.createRegistrationFormViewModel() }
+    val onSuccess by rememberUpdatedState(onRegistrationSuccess)
+    val onFailure by rememberUpdatedState(onRegistrationFailure)
     val state by viewModel.uiState.collectAsState()
 
     LaunchedEffect(viewModel) {
         viewModel.events.collectLatest { event ->
             when (event) {
-                is RegistrationFormEvent.RegistrationSucceeded -> onRegistrationSuccess()
-                is RegistrationFormEvent.RegistrationFailed -> onRegistrationFailure(event.message)
+                is RegistrationFormEvent.RegistrationSucceeded -> onSuccess()
+                is RegistrationFormEvent.RegistrationFailed -> onFailure(event.message)
             }
         }
     }
@@ -68,7 +69,8 @@ internal fun RegistrationFormRoute(
 }
 
 /**
- * Registration form content that displays user registration form fields and handles user interactions.
+ * Registration form content that displays user registration form fields and handles
+ * user interactions.
  *
  * This is a stateless composable.
  *
@@ -149,7 +151,7 @@ internal fun RegistrationFormContent(
  * @param onUpdatePhoneNumber Callback invoked when the phone number field is updated.
  */
 @Composable
-private fun ColumnScope.PersonalInfoSection(
+private fun PersonalInfoSection(
     state: RegistrationFormUiState,
     onUpdateFirstName: (String) -> Unit,
     onUpdateLastName: (String) -> Unit,
@@ -229,7 +231,7 @@ private fun AddressSection(
     )
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         OutlinedTextField(
-            modifier = Modifier.weight(4f),
+            modifier = Modifier.weight(weight = 4f),
             value = address.street,
             onValueChange = {
                 onAddressChange(address.copy(street = it))
@@ -262,7 +264,7 @@ private fun AddressSection(
             enabled = !state.isLoading,
         )
         OutlinedTextField(
-            modifier = Modifier.weight(3f),
+            modifier = Modifier.weight(weight = 3f),
             value = address.city,
             onValueChange = {
                 onAddressChange(address.copy(city = it))

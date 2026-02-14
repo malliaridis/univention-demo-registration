@@ -8,11 +8,14 @@ import com.malliaridis.univention.domain.Address
  * @property firstName Input value for the user's first name.
  * @property lastName Input value for the user's last name.
  * @property phoneNumber Input value for the user's phone number.
- * @property address Input value for the user's address. This is a composite value that is updated as an object.
+ * @property address Input value for the user's address. This is a composite value
+ * that is updated as an object.
  * @property username Input value for the user's username.
- * @property usernameEdited Whether the username has been edited since the last successful registration.
+ * @property usernameEdited Whether the username has been edited since the last
+ * successful registration.
  * Affects auto-completion of the username field.
- * @property isLoading Whether the registration process is currently in progress. Affects enabled state of input fields.
+ * @property isLoading Whether the registration process is currently in progress.
+ * Affects enabled state of input fields.
  * @property firstNameError Error message for the [firstName] field.
  * @property lastNameError Error message for the [lastName] field.
  * @property usernameError Error message for the [username] field.

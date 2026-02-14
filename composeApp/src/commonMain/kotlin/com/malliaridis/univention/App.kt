@@ -15,14 +15,14 @@ import com.malliaridis.univention.registration.ui.UserRegistrationActivity
  * Shared application entry point used by platform-specific entry points.
  */
 @Composable
-fun App() {
+fun App(modifier: Modifier = Modifier) {
     val registrationComponent by lazy {
         DefaultRegistrationComponent(httpClient = getHttpClient())
     }
 
     MaterialTheme {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .background(MaterialTheme.colorScheme.primaryContainer)
                 .safeContentPadding()
                 .fillMaxSize(),
