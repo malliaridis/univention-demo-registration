@@ -15,6 +15,9 @@ material3 = "1.10.0-alpha05"
 exposed = "1.0.0"
 h2 = "2.4.240"
 postgresql = "42.7.7"
+detekt = "2.0.0-alpha.2"
+ktlint = "13.0.0"
+nlopez-rules = "0.5.6"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -53,6 +56,9 @@ exposed-migration-core = { module = "org.jetbrains.exposed:exposed-migration-cor
 exposed-migration-jdbc = { module = "org.jetbrains.exposed:exposed-migration-jdbc", version.ref = "exposed" }
 h2 = { module = "com.h2database:h2", version.ref = "h2" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+detekt-formatting = { group = "dev.detekt", name = "detekt-formatting", version.ref = "detekt" }
+detekt-plugin = { group = "dev.detekt", name = "dev.detekt.gradle.plugin", version.ref = "detekt" }
+nlopez-compose-rules-detekt = { group = "io.nlopez.compose.rules", name = "detekt", version.ref = "nlopez-rules" }
 
 [plugins]
 composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }
@@ -62,3 +68,5 @@ kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }
+jlleitschuh-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
