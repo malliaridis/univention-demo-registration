@@ -18,7 +18,9 @@ data class DatabaseConfig(
                 val resolvedDriver = driver ?: when {
                     jdbcUrl.startsWith(prefix = "jdbc:postgresql:") -> POSTGRES_DATABASE_DRIVER
                     jdbcUrl.startsWith(prefix = "jdbc:h2:") -> H2_DATABASE_DRIVER
-                    else -> error("$DATABASE_DRIVER_KEY is required for $DATABASE_JDBC_URL_KEY=$jdbcUrl")
+                    else -> error(
+                        "$DATABASE_DRIVER_KEY is required for $DATABASE_JDBC_URL_KEY=$jdbcUrl"
+                    )
                 }
 
                 return DatabaseConfig(

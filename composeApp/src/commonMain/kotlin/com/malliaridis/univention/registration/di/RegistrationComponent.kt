@@ -8,8 +8,8 @@ import com.malliaridis.univention.registration.repository.UserRegistrationReposi
 /**
  * Component responsible for the dependencies of the user registration flow.
  *
- * This component provides access to essential dependencies and factory methods for creating viewmodels
- * used in the registration UI flow.
+ * This component provides access to essential dependencies and factory methods
+ * for creating view models used in the registration UI flow.
  */
 interface RegistrationComponent {
 

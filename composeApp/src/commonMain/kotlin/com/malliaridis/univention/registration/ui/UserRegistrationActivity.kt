@@ -81,7 +81,7 @@ fun UserRegistrationActivity(
 
                 entry<RegistrationScene.RegistrationFormScene> {
                     RegistrationFormRoute(
-                        component = component,
+                        viewModel = viewModel { component.createRegistrationFormViewModel() },
                         modifier = cardModifier,
                         onRegistrationSuccess = viewModel::onCompleteRegistration,
                         onRegistrationFailure = viewModel::onFailRegistration,

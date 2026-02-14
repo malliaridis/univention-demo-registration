@@ -92,7 +92,8 @@ class RegistrationFormViewModel(
             username = username,
             usernameError = null,
             generalError = null,
-            // Once the user makes any manual changes, the auto-suggest feature is disabled
+            // Once the user makes any manual changes,
+            // the auto-suggest feature is disabled
             usernameEdited = true,
         )
     }
@@ -114,7 +115,8 @@ class RegistrationFormViewModel(
     /**
      * Initiates the registration process with the provided data.
      *
-     * This function resets the errors, evaluates the input, and triggers the [registerUser] use case.
+     * This function resets the errors, evaluates the input, and triggers the
+     * [registerUser] use case.
      */
     fun onRegister() {
         uiState.value = uiState.value.copy(
@@ -155,7 +157,8 @@ class RegistrationFormViewModel(
                     generalError = error.message ?: uiState.value.generalError,
                 )
 
-                // If the error is critical and the user should not retry, reset state and navigate to error
+                // If the error is critical and the user should not retry,
+                // reset the state and navigate to error
                 // resetForm()
                 // events.tryEmit(
                 //     RegistrationFormEvent.RegistrationFailed(message = error.message),
@@ -169,5 +172,7 @@ class RegistrationFormViewModel(
     }
 
     private fun useUsername(): Boolean =
-        uiState.value.usernameEdited || uiState.value.firstName.isBlank() || uiState.value.lastName.isBlank()
+        uiState.value.usernameEdited
+            || uiState.value.firstName.isBlank()
+            || uiState.value.lastName.isBlank()
 }

@@ -16,9 +16,13 @@ import kotlin.uuid.Uuid
  *
  * @property httpClient The pre-configured HTTP client to use for user registration operations.
  */
-class HttpUserRegistrationRepository(private val httpClient: HttpClient) : UserRegistrationRepository {
+class HttpUserRegistrationRepository(
+    private val httpClient: HttpClient,
+) : UserRegistrationRepository {
 
-    override suspend fun registerUser(userRegistration: CreateUserRequestDto) : Result<Uuid> = runCatching {
+    override suspend fun registerUser(
+        userRegistration: CreateUserRequestDto,
+    ) : Result<Uuid> = runCatching {
         val response = httpClient.post(urlString = USERS) {
             setBody(userRegistration)
         }

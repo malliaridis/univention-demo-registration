@@ -79,8 +79,11 @@ fun main() {
 /**
  * Application module configuration.
  *
- * This module is responsible for configuring the application's routing, content negotiation, and dependency injection.
- * Note that in case the application scales, this module should be split into multiple modules instead.
+ * This module is responsible for configuring the application's routing, content negotiation,
+ * and dependency injection.
+ *
+ * Note that in case the application scales, this module should be split into
+ * multiple modules instead.
  */
 fun Application.module() {
     log.info("developmentMode={}", developmentMode)

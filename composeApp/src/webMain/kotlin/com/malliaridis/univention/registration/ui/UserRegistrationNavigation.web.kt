@@ -17,9 +17,12 @@ internal actual fun UserRegistrationNavigation(
     backStack = viewModel.backStack,
     saveKey = { scene ->
         when (scene) {
-            is RegistrationScene.WelcomeScene -> buildBrowserHistoryFragment(name = "welcome")
-            is RegistrationScene.RegistrationFormScene -> buildBrowserHistoryFragment(name = "register")
-            is RegistrationScene.SuccessScene -> buildBrowserHistoryFragment(name = "registration-completed")
+            is RegistrationScene.WelcomeScene ->
+                buildBrowserHistoryFragment(name = "welcome")
+            is RegistrationScene.RegistrationFormScene ->
+                buildBrowserHistoryFragment(name = "register")
+            is RegistrationScene.SuccessScene ->
+                buildBrowserHistoryFragment(name = "registration-completed")
             is RegistrationScene.FailureScene -> buildBrowserHistoryFragment(
                 name = "error",
                 parameters = scene.message?.let { mapOf("error" to it) } ?: emptyMap(),
