@@ -1,3 +1,5 @@
+import com.malliaridis.gradle.setupDetekt
+
 plugins {
     // this is necessary to avoid the plugins to be loaded multiple times
     // in each subproject's classloader
@@ -8,4 +10,9 @@ plugins {
     alias(libs.plugins.composeHotReload) apply false
     alias(libs.plugins.ktor) apply false
     alias(libs.plugins.kotlinSerialization) apply false
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.jlleitschuh.ktlint) apply false
+    id("com.malliaridis.gradle.setup")
 }
+
+setupDetekt()
