@@ -8,11 +8,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.malliaridis.univention.registration.integration.DefaultUserRegistrationViewModel
+import com.malliaridis.univention.registration.di.DefaultRegistrationComponent
 import com.malliaridis.univention.registration.ui.UserRegistrationActivity
 
+/**
+ * Shared application entry point used by platform-specific entry points.
+ */
 @Composable
 fun App() {
+    val registrationComponent by lazy {
+        DefaultRegistrationComponent(httpClient = getHttpClient())
+    }
+
     MaterialTheme {
         Column(
             modifier = Modifier
@@ -22,8 +29,7 @@ fun App() {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             UserRegistrationActivity(
-                // TODO retrieve first user registration view model instance
-                viewModel = DefaultUserRegistrationViewModel(),
+                component = registrationComponent,
             )
         }
     }

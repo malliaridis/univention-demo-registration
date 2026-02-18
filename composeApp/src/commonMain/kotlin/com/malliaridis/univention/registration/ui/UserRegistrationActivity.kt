@@ -25,26 +25,35 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import com.malliaridis.univention.registration.RegistrationScene
-import com.malliaridis.univention.registration.UserRegistrationViewModel
+import com.malliaridis.univention.registration.di.RegistrationComponent
 import org.jetbrains.compose.resources.painterResource
 import univention_registration.composeapp.generated.resources.Res
 import univention_registration.composeapp.generated.resources.github
 
+/**
+ * Activity for the user registration flow.
+ *
+ * This activity provides the top-level navigation and UI for the user registration process.
+ *
+ * @param component Registration component providing dependencies for the registration form.
+ * @param modifier Modifier to be applied to the layout.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserRegistrationActivity(
-    viewModel: UserRegistrationViewModel,
+    component: RegistrationComponent,
     modifier: Modifier = Modifier,
 ) = Scaffold(
     modifier = modifier,
-    topBar = {
-        UserRegistrationHeader()
-    },
+    topBar = { UserRegistrationHeader() },
     contentWindowInsets = WindowInsets.systemBars.exclude(WindowInsets.navigationBars),
 ) { innerPadding ->
+    val viewModel = viewModel { component.createUserRegistrationViewModel() }
+
     UserRegistrationNavigation(viewModel)
     Box(
         modifier = Modifier
@@ -71,9 +80,11 @@ fun UserRegistrationActivity(
                 }
 
                 entry<RegistrationScene.RegistrationFormScene> {
-                    RegistrationFormContent(
+                    RegistrationFormRoute(
+                        component = component,
                         modifier = cardModifier,
-                        viewModel = it.viewModel,
+                        onRegistrationSuccess = viewModel::onCompleteRegistration,
+                        onRegistrationFailure = viewModel::onFailRegistration,
                     )
                 }
                 entry<RegistrationScene.SuccessScene> {
@@ -86,6 +97,7 @@ fun UserRegistrationActivity(
                     RegistrationResultFailureContent(
                         modifier = cardModifier,
                         onRestart = viewModel::onRestart,
+                        error = it.message,
                     )
                 }
             }
@@ -93,6 +105,9 @@ fun UserRegistrationActivity(
     }
 }
 
+/**
+ * Top-level header for the user registration activity.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun UserRegistrationHeader(

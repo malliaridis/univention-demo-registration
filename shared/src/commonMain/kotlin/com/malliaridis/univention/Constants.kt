@@ -1,6 +1,6 @@
 package com.malliaridis.univention
 
-const val SERVER_PORT = 8080
+const val SERVER_PORT = 3000
 
 /**
  * Maximum length of first name and last name.

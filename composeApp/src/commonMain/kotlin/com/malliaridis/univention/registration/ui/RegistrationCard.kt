@@ -14,6 +14,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 
+/**
+ * Registration card used for styling the registration flow with a card layout.
+ *
+ * @param modifier Modifier to be applied to the layout.
+ * @param shape Shape of the card.
+ * @param contentPadding Padding values inside the card.
+ * @param verticalArrangement Vertical arrangement of the content inside the card.
+ * @param horizontalAlignment Horizontal alignment of the content inside the card.
+ * @param colors Card colors.
+ * @param border Border of the card.
+ * @param content Content of the card.
+ */
 @Composable
 fun RegistrationCard(
     modifier: Modifier = Modifier,

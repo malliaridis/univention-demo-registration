@@ -10,6 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+/**
+ * Content for displaying a welcome message and button for starting the registration process.
+ *
+ * @param onRegister Callback invoked when the start registration button is clicked.
+ * @param modifier Modifier to be applied to the layout.
+ */
 @Composable
 fun RegistrationWelcomeContent(
     onRegister: () -> Unit,

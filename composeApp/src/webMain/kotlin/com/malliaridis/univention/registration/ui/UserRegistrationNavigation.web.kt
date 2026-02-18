@@ -4,9 +4,8 @@ import androidx.compose.runtime.Composable
 import com.github.terrakok.navigation3.browser.ChronologicalBrowserNavigation
 import com.github.terrakok.navigation3.browser.buildBrowserHistoryFragment
 import com.github.terrakok.navigation3.browser.getBrowserHistoryFragmentName
+import com.github.terrakok.navigation3.browser.getBrowserHistoryFragmentParameters
 import com.malliaridis.univention.registration.RegistrationScene
-import com.malliaridis.univention.registration.UserRegistrationViewModel
-import com.malliaridis.univention.registration.integration.DefaultRegistrationFormViewModel
 
 /**
  * TODO Add state serialization and deserialization
@@ -18,18 +17,22 @@ internal actual fun UserRegistrationNavigation(
     backStack = viewModel.backStack,
     saveKey = { scene ->
         when (scene) {
-            is RegistrationScene.WelcomeScene -> buildBrowserHistoryFragment("welcome")
-            is RegistrationScene.RegistrationFormScene -> buildBrowserHistoryFragment("register")
-            is RegistrationScene.SuccessScene -> buildBrowserHistoryFragment("registration-completed")
-            is RegistrationScene.FailureScene -> buildBrowserHistoryFragment("error")
+            is RegistrationScene.WelcomeScene -> buildBrowserHistoryFragment(name = "welcome")
+            is RegistrationScene.RegistrationFormScene -> buildBrowserHistoryFragment(name = "register")
+            is RegistrationScene.SuccessScene -> buildBrowserHistoryFragment(name = "registration-completed")
+            is RegistrationScene.FailureScene -> buildBrowserHistoryFragment(
+                name = "error",
+                parameters = scene.message?.let { mapOf("error" to it) } ?: emptyMap(),
+            )
         }
     },
     restoreKey = { fragment ->
+        val parameters = getBrowserHistoryFragmentParameters(fragment)
         when (getBrowserHistoryFragmentName(fragment)) {
             "welcome" -> RegistrationScene.WelcomeScene
-            "register" -> RegistrationScene.RegistrationFormScene(DefaultRegistrationFormViewModel())
+            "register" -> RegistrationScene.RegistrationFormScene
             "registration-completed" -> RegistrationScene.SuccessScene
-            "error" -> RegistrationScene.FailureScene
+            "error" -> RegistrationScene.FailureScene(parameters["error"])
             else -> null
         }
     },

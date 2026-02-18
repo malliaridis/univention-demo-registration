@@ -27,6 +27,9 @@ kotlin {
     }
 
     sourceSets {
+        sourceSets.all {
+            languageSettings.optIn("kotlin.uuid.ExperimentalUuidApi")
+        }
         commonMain.dependencies {
             implementation(projects.shared)
             implementation(libs.compose.runtime)
@@ -41,6 +44,10 @@ kotlin {
             implementation(libs.androidx.navigation3.ui)
             implementation(libs.androidx.material3.adaptive.asProvider())
             implementation(libs.androidx.material3.adaptive.nav3)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.contentNegotiation)
+            implementation(libs.ktor.client.engine.cio)
+            implementation(libs.ktor.serialization.json)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

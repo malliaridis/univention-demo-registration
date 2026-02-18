@@ -12,6 +12,7 @@ import com.malliaridis.univention.dto.CreateUserResponseDto
 import com.malliaridis.univention.registration.UserRepository
 import com.malliaridis.univention.registration.integration.H2UserRepository
 import com.malliaridis.univention.validation.CreateUserRequestValidator
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
@@ -19,19 +20,20 @@ import io.ktor.server.application.install
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.plugins.cors.routing.CORS
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
+import kotlin.io.path.Path
+import kotlin.io.path.createDirectories
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.v1.core.ExperimentalDatabaseMigrationApi
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.migration.jdbc.MigrationUtils
-import kotlin.io.path.Path
-import kotlin.io.path.createDirectories
 
 /**
  * Main application entry point.
@@ -70,6 +72,10 @@ fun main() {
  * Note that in case the application scales, this module should be split into multiple modules instead.
  */
 fun Application.module() {
+    install(CORS) {
+        anyHost() // TODO Don't do this in production
+        allowHeader(HttpHeaders.ContentType)
+    }
     install(ContentNegotiation) {
         json(
             Json {
