@@ -35,7 +35,11 @@ dependencies {
     implementation(libs.exposed.jdbc)
     implementation(libs.exposed.migration.core)
     implementation(libs.exposed.migration.jdbc)
+
+    // Use H2 for tests and local development,
     implementation(libs.h2)
+    // Use Postgres in docker-compose
+    implementation(libs.postgresql)
 
     testImplementation(libs.ktor.server.testHost)
     testImplementation(libs.kotlin.testJunit)
