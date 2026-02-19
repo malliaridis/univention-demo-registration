@@ -27,8 +27,10 @@ internal fun getHttpClient() = HttpClient {
         )
     }
     defaultRequest {
-        // TODO Make server URL configurable
-        url("http://127.0.0.1:$SERVER_PORT$BASE_PATH")
+        // Use a relative base URL so nginx can serve the app and proxy /api/* to the server.
+        // This will resolve to: <current-origin>/api/v1
+        // This setup also avoids CORS limitations
+        url(BASE_PATH)
         contentType(ContentType.Application.Json)
     }
 }
