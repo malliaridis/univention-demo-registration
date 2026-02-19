@@ -122,7 +122,7 @@ private fun UserRegistrationHeader(
     actions = {
         val uriHandler = LocalUriHandler.current
         IconButton(onClick = {
-            uriHandler.openUri("https://github.com/malliaridis/univention-registration")
+            uriHandler.openUri("https://github.com/malliaridis/univention-demo-registration")
         }) {
             Icon(
                 modifier = Modifier.size(24.dp),
