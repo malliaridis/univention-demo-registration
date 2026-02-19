@@ -1,61 +1,122 @@
-This is a Kotlin Multiplatform project targeting Web, Server.
+# univention-registration
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+A small **Kotlin Multiplatform + Ktor** demo project that implements a simple **user registration flow**:
 
-* [/server](./server/src/main/kotlin) is for the Ktor server application.
+- **Frontend**: Compose Multiplatform UI running in the browser (Kotlin/Wasm and Kotlin/JS) and on Desktop (JVM).
+- **Backend**: Ktor server exposing a small REST API.
+- **Database**: PostgreSQL in Docker (H2 is used as a local/dev fallback by the server when no DB env is provided).
+- **Reverse proxy / static hosting**: Nginx serves the web build and proxies API calls to the server.
 
-* [/shared](./shared/src) is for the code that will be shared between all targets in the project.
-  The most important subfolder is [commonMain](./shared/src/commonMain/kotlin). If preferred, you
-  can add code to the platform-specific folders here too.
+## Project Structure
 
-### Build and Run Server
+- `composeApp/` – Compose Multiplatform app (UI + client-side networking)
+  - Targets: **Desktop (JVM)**, **Web (JS)**, **Web (Wasm)**
+- `server/` – Ktor server (REST API + DB integration)
+- `shared/` – Shared Kotlin Multiplatform module (DTOs, validation, constants, etc.)
+- `nginx/` – Nginx config + Dockerfile to serve the web build and proxy `/api/*`
+- `db/migration/` – SQL migration scripts (generated/used by the server)
 
-To build and run the development version of the server, use the run configuration from the run widget
-in your IDE’s toolbar or run it directly from the terminal:
-- on macOS/Linux
-  ```shell
+## Prerequisites
+
+To run the current project, you will need to have:
+
+- **JDK 21**
+- **Docker** + **Docker Compose** (for the full stack)
+
+Additionally, if you are using INtelliJ IDEA you may also want to install some plugins to enhance your development
+experience and render previews. For that, the following plugins are recommended:
+
+- **[Kotlin Multiplatform](https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform)** plugin for IntelliJ IDEA
+- **Compose Multiplatform (bundled)** plugin for IntelliJ IDEA
+
+## Run the full stack (recommended)
+
+1. Create an `.env` file (based on `.env.example`) and set the DB password:
+   ```properties
+   POSTGRES_PASSWORD=<your_password_here>
+   ```
+
+2. Start everything:
+   ```bash
+   docker compose up --build
+   ```
+
+3. Open the web app at http://localhost:8080
+
+## Run backend locally (without Docker)
+
+The server can run standalone. If you don’t provide DB environment variables, an in-memory H2 database is used instead.
+This is beneficial for development and testing.
+
+- Linux/macOS:
+  ```bash
   ./gradlew :server:run
   ```
-- on Windows
-  ```shell
+
+- Windows:
+  ```powershell
   .\gradlew.bat :server:run
   ```
 
-### Build and Run Web Application
+### Use an external database locally (optional)
 
-To build and run the development version of the web app, use the run configuration from the run widget
-in your IDE's toolbar or run it directly from the terminal:
-- for the Wasm target (faster, modern browsers):
-  - on macOS/Linux
-    ```shell
-    ./gradlew :composeApp:wasmJsBrowserDevelopmentRun
-    ```
-  - on Windows
-    ```shell
-    .\gradlew.bat :composeApp:wasmJsBrowserDevelopmentRun
-    ```
-- for the JS target (slower, supports older browsers):
-  - on macOS/Linux
-    ```shell
-    ./gradlew :composeApp:jsBrowserDevelopmentRun
-    ```
-  - on Windows
-    ```shell
-    .\gradlew.bat :composeApp:jsBrowserDevelopmentRun
-    ```
+To run the server against an external database, set these environment variables before running the server:
 
----
+```properties
+DB_JDBC_URL=jdbc:postgresql://<host>:<port>/<db>
+DB_USER=<user>
+DB_PASSWORD=<password>
+DB_DRIVER=org.postgresql.Driver
+```
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
-[Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
+## Run the frontend locally (dev mode)
 
-We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
-If you face any issues, please report them on [YouTrack](https://youtrack.jetbrains.com/newIssue?project=CMP).
+### Web (Wasm) - modern browsers, fast
+- Linux/macOS:
+  ```bash
+  ./gradlew :composeApp:wasmJsBrowserDevelopmentRun
+  ```
+- Windows:
+  ```powershell
+  .\gradlew.bat :composeApp:wasmJsBrowserDevelopmentRun
+  ```
+
+### Web (JS) - broader compatibility
+- Linux/macOS:
+  ```bash
+  ./gradlew :composeApp:jsBrowserDevelopmentRun
+  ```
+- Windows:
+  ```powershell
+  .\gradlew.bat :composeApp:jsBrowserDevelopmentRun
+  ```
+
+### Desktop (JVM)
+- Linux/macOS:
+  ```bash
+  ./gradlew :composeApp:run
+  ```
+- Windows:
+  ```powershell
+  .\gradlew.bat :composeApp:run
+  ```
+
+## Useful endpoints
+
+- `POST /api/v1/users` - create/register a user
+
+## Current Project State
+
+This project is intentionally small and demo-focused. Therefore, some areas are not yet implemented:
+
+- **Proper DB migration** – Right now [Exposed](https://github.com/JetBrains/Exposed) is preparing the database, but
+  it can generate migration scripts. These scripts are generated in `db/migration/` and could be used to migrate an
+  existing DB to continue development over time
+- **Missing unit and UI tests**
+- **Address fields are incomplete** – A more complete example would capture more information, like country, state and
+  an additional address line
+- **Address validation is skipped** – It is possible to leave the address fields empty
+- **Limited error handling** – The frontend does not interpret the errors returned by the server
+- **Only the targets JS, Wasm and JVM are included** – Additional targets like Android and iOS native apps could be
+  added in the future
+- **No production-ready configuration** – Logging, security, config files, etc. are not production ready

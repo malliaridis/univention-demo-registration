@@ -7,7 +7,7 @@ import com.malliaridis.univention.registration.UserRepository
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import kotlin.uuid.Uuid
 
-class H2UserRepository : UserRepository {
+class JDBCUserRepository : UserRepository {
     override fun createUser(user: CreateUserRequestDto): Result<Uuid> = runCatching {
         val user = transaction {
             UserEntity.new {
