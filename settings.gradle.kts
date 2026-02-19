@@ -1,4 +1,4 @@
-rootProject.name = "univention-registration"
+rootProject.name = "univention-demo-registration"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
