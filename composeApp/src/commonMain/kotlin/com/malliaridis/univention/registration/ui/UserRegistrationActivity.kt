@@ -31,8 +31,8 @@ import androidx.navigation3.ui.NavDisplay
 import com.malliaridis.univention.registration.RegistrationScene
 import com.malliaridis.univention.registration.di.RegistrationComponent
 import org.jetbrains.compose.resources.painterResource
-import univention_registration.composeapp.generated.resources.Res
-import univention_registration.composeapp.generated.resources.github
+import univention_demo_registration.composeapp.generated.resources.Res
+import univention_demo_registration.composeapp.generated.resources.github
 
 /**
  * Activity for the user registration flow.
