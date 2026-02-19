@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -18,12 +18,14 @@ kotlin {
     }
     
     sourceSets {
+        sourceSets.all {
+            languageSettings.optIn("kotlin.uuid.ExperimentalUuidApi")
+        }
         commonMain.dependencies {
-            // put your Multiplatform dependencies here
+            implementation(libs.kotlinx.serialization.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
     }
 }
-
