@@ -1,5 +1,10 @@
 package com.malliaridis.univention
 
+/**
+ * The port on which the server is running.
+ *
+ * Please note that changing this value will require changes to the development server for the web frontend.
+ */
 const val SERVER_PORT = 3000
 
 /**
