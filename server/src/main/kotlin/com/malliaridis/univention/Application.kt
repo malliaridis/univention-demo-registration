@@ -2,21 +2,21 @@ package com.malliaridis.univention
 
 import com.malliaridis.univention.ApiV1Endpoints.BASE_PATH
 import com.malliaridis.univention.ApiV1Endpoints.USERS
-import com.malliaridis.univention.database.DATABASE_URL
-import com.malliaridis.univention.database.H2_DATABASE_DRIVER
+import com.malliaridis.univention.database.DatabaseConfig
 import com.malliaridis.univention.database.MIGRATIONS_DIRECTORY
 import com.malliaridis.univention.database.tables.AddressesTable
 import com.malliaridis.univention.database.tables.UsersTable
 import com.malliaridis.univention.dto.CreateUserRequestDto
 import com.malliaridis.univention.dto.CreateUserResponseDto
 import com.malliaridis.univention.registration.UserRepository
-import com.malliaridis.univention.registration.integration.H2UserRepository
+import com.malliaridis.univention.registration.integration.JDBCUserRepository
 import com.malliaridis.univention.validation.CreateUserRequestValidator
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
+import io.ktor.server.application.log
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
@@ -42,7 +42,18 @@ import org.jetbrains.exposed.v1.migration.jdbc.MigrationUtils
  */
 @OptIn(ExperimentalDatabaseMigrationApi::class)
 fun main() {
-    Database.connect(url = DATABASE_URL, driver = H2_DATABASE_DRIVER)
+    val config = DatabaseConfig.fromEnvironment()
+
+    if (config.user != null) {
+        Database.connect(
+            url = config.jdbcUrl,
+            driver = config.driver,
+            user = config.user,
+            password = config.password ?: "",
+        )
+    } else {
+        Database.connect(url = config.jdbcUrl, driver = config.driver)
+    }
     // TODO Add database connection error handling
 
     transaction {
@@ -72,9 +83,14 @@ fun main() {
  * Note that in case the application scales, this module should be split into multiple modules instead.
  */
 fun Application.module() {
-    install(CORS) {
-        anyHost() // TODO Don't do this in production
-        allowHeader(HttpHeaders.ContentType)
+    log.info("developmentMode={}", developmentMode)
+    val isDev = developmentMode
+
+    if (isDev) {
+        install(CORS) {
+            anyHost() // allow other origins, should be limited to specific hosts in the future
+            allowHeader(HttpHeaders.ContentType)
+        }
     }
     install(ContentNegotiation) {
         json(
@@ -85,8 +101,7 @@ fun Application.module() {
         )
     }
 
-    // TODO Consider parameterizing the repository instantiation
-    val userRepository: UserRepository = H2UserRepository()
+    val userRepository: UserRepository = JDBCUserRepository()
 
     routing {
         route(BASE_PATH) {
