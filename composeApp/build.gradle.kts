@@ -1,5 +1,6 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -12,13 +13,47 @@ kotlin {
     jvm()
 
     js {
-        browser()
+        browser {
+            commonWebpackConfig {
+                val ds = devServer ?: KotlinWebpackConfig.DevServer()
+                val proxies = ds.proxy ?: mutableListOf()
+
+                proxies.add(
+                    KotlinWebpackConfig.DevServer.Proxy(
+                        context = mutableListOf("/api"),
+                        target = "http://127.0.0.1:3000",
+                        changeOrigin = true,
+                        secure = false,
+                    )
+                )
+
+                ds.proxy = proxies
+                devServer = ds
+            }
+        }
         binaries.executable()
     }
-    
+
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        browser()
+        browser {
+            commonWebpackConfig {
+                val ds = devServer ?: KotlinWebpackConfig.DevServer()
+                val proxies = ds.proxy ?: mutableListOf()
+
+                proxies.add(
+                    KotlinWebpackConfig.DevServer.Proxy(
+                        context = mutableListOf("/api"),
+                        target = "http://127.0.0.1:3000",
+                        changeOrigin = true,
+                        secure = false,
+                    )
+                )
+
+                ds.proxy = proxies
+                devServer = ds
+            }
+        }
         binaries.executable()
     }
 
