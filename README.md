@@ -101,6 +101,10 @@ DB_DRIVER=org.postgresql.Driver
   .\gradlew.bat :composeApp:run
   ```
 
+For the JVM client you may have to override the API base URL by providing an environment or system variable called
+`API_BASE_URL` that overrides the default value of `http://127.0.0.1:3000/api/v1/`. This can be useful when testing 
+the JVM client against a docker deployment.
+
 ## Useful endpoints
 
 - `POST /api/v1/users` - create/register a user
@@ -120,3 +124,4 @@ This project is intentionally small and demo-focused. Therefore, some areas are 
 - **Only the targets JS, Wasm and JVM are included** – Additional targets like Android and iOS native apps could be
   added in the future
 - **No production-ready configuration** – Logging, security, config files, etc. are not production ready
+- **Lenient database constraints** – The database schema is very lenient in when it comes to the input values
