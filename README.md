@@ -1,4 +1,4 @@
-# univention-registration
+# univention-demo-registration
 
 A small **Kotlin Multiplatform + Ktor** demo project that implements a simple **user registration flow**:
 
