@@ -30,7 +30,17 @@ internal fun getHttpClient() = HttpClient {
         // Use a relative base URL so nginx can serve the app and proxy /api/* to the server.
         // This will resolve to: <current-origin>/api/v1
         // This setup also avoids CORS limitations
-        url(BASE_PATH)
+        url(urlString = getApiBaseUrl())
         contentType(ContentType.Application.Json)
     }
 }
+
+/**
+ * Provides the base URL for API requests.
+ *
+ * This function is expected to return the root URL of the API endpoint, which may vary depending
+ * on the platform or environment.
+ *
+ * @return The base URL for the API as a string.
+ */
+internal expect fun getApiBaseUrl(): String
